@@ -15,12 +15,13 @@ interface MusicApiService {
     companion object {
         private const val BASE_URL = "https://musicapi.pjasoft.com/"
 
-        fun create(): MusicApiService {
-            return Retrofit.Builder()
+        private val retrofit by lazy {
+            Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(MusicApiService::class.java)
         }
+
+        fun create(): MusicApiService = retrofit.create(MusicApiService::class.java)
     }
 }

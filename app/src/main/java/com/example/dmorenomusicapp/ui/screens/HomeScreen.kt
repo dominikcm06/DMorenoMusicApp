@@ -42,23 +42,28 @@ fun HomeScreen(onAlbumClick: (String) -> Unit) {
     var isError by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
+    fun fetchAlbums() {
+        isLoading = true
+        isError = false
         scope.launch {
             try {
                 val service = MusicApiService.create()
-                albums = service.getAlbums()
-                if (albums.isNotEmpty()) {
-                    isLoading = false
-                    isError = false
-                } else {
-                    isLoading = false
-                    isError = true
+                val fetchedAlbums = service.getAlbums()
+                val desiredOrder = listOf("Tales of Ithiria", "Awake", "Nightmare", "Abbey Road")
+                albums = fetchedAlbums.sortedBy { album ->
+                    val index = desiredOrder.indexOf(album.title)
+                    if (index != -1) index else desiredOrder.size
                 }
+                isLoading = false
             } catch (e: Exception) {
                 isLoading = false
                 isError = true
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        fetchAlbums()
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -77,20 +82,8 @@ fun HomeScreen(onAlbumClick: (String) -> Unit) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(text = "Error al cargar los datos", color = Color.Red)
-                        Button(onClick = {
-                            isLoading = true
-                            isError = false
-                            scope.launch {
-                                try {
-                                    val service = MusicApiService.create()
-                                    albums = service.getAlbums()
-                                    isLoading = false
-                                } catch (e: Exception) {
-                                    isLoading = false
-                                    isError = true
-                                }
-                            }
-                        }) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Button(onClick = { fetchAlbums() }) {
                             Text("Reintentar")
                         }
                     }

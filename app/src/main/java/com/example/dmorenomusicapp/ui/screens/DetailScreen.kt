@@ -41,7 +41,9 @@ fun DetailScreen(albumId: String, onBack: () -> Unit) {
     var isError by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(albumId) {
+    fun fetchDetail() {
+        isLoading = true
+        isError = false
         scope.launch {
             try {
                 val service = MusicApiService.create()
@@ -54,6 +56,10 @@ fun DetailScreen(albumId: String, onBack: () -> Unit) {
         }
     }
 
+    LaunchedEffect(albumId) {
+        fetchDetail()
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -61,7 +67,13 @@ fun DetailScreen(albumId: String, onBack: () -> Unit) {
             }
         } else if (isError) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Error al cargar el detalle", color = Color.Red)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Error al cargar el detalle", color = Color.Red)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = { fetchDetail() }) {
+                        Text("Reintentar")
+                    }
+                }
             }
         } else {
             album?.let { currentAlbum ->
@@ -119,7 +131,7 @@ fun DetailHeader(album: Album, onBack: () -> Unit) {
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color(0xFF130E26).copy(alpha = 0.85f)),
+                        colors = listOf(Color.Transparent, Color(0xFF2D1B69).copy(alpha = 0.85f)),
                         startY = 500f
                     )
                 )
@@ -215,7 +227,7 @@ fun AboutSection(description: String) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = if (description.isEmpty()) "Un álbum increíble que mezcla diversos géneros para crear una experiencia única." else description,
+                text = description,
                 fontSize = 14.sp,
                 color = TextGray,
                 lineHeight = 20.sp
