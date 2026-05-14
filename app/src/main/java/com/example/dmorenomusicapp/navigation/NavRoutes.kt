@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 object Home
 
 @Serializable
-data class Detail(val albumId: Int)
+data class Detail(val albumId: String)

@@ -10,7 +10,7 @@ interface MusicApiService {
     suspend fun getAlbums(): List<Album>
 
     @GET("api/albums/{id}")
-    suspend fun getAlbumById(@Path("id") id: Int): Album
+    suspend fun getAlbumById(@Path("id") id: String): Album
 
     companion object {
         private const val BASE_URL = "https://musicapi.pjasoft.com/"

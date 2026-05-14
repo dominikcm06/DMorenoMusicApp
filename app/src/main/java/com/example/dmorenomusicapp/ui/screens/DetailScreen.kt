@@ -33,7 +33,7 @@ import com.example.dmorenomusicapp.ui.theme.TextGray
 import kotlinx.coroutines.launch
 
 @Composable
-fun DetailScreen(albumId: Int, onBack: () -> Unit) {
+fun DetailScreen(albumId: String, onBack: () -> Unit) {
     var album by remember { mutableStateOf<Album?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }

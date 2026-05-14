@@ -34,7 +34,7 @@ import com.example.dmorenomusicapp.ui.theme.TextGray
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(onAlbumClick: (Int) -> Unit) {
+fun HomeScreen(onAlbumClick: (String) -> Unit) {
     var albums by remember { mutableStateOf<List<Album>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
@@ -45,7 +45,13 @@ fun HomeScreen(onAlbumClick: (Int) -> Unit) {
             try {
                 val service = MusicApiService.create()
                 albums = service.getAlbums()
-                isLoading = false
+                if (albums.isNotEmpty()) {
+                    isLoading = false
+                    isError = false
+                } else {
+                    isLoading = false
+                    isError = true
+                }
             } catch (e: Exception) {
                 isLoading = false
                 isError = true
@@ -67,7 +73,25 @@ fun HomeScreen(onAlbumClick: (Int) -> Unit) {
                 }
             } else if (isError) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Error al cargar los datos", color = Color.Red)
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(text = "Error al cargar los datos", color = Color.Red)
+                        Button(onClick = {
+                            isLoading = true
+                            isError = false
+                            scope.launch {
+                                try {
+                                    val service = MusicApiService.create()
+                                    albums = service.getAlbums()
+                                    isLoading = false
+                                } catch (e: Exception) {
+                                    isLoading = false
+                                    isError = true
+                                }
+                            }
+                        }) {
+                            Text("Reintentar")
+                        }
+                    }
                 }
             } else {
                 LazyColumn(
@@ -122,7 +146,7 @@ fun HeaderSection() {
         ) {
             Text(text = "Good Morning!", color = Color.White, fontSize = 16.sp)
             Text(
-                text = "Juan Frausto",
+                text = "Dominik Moreno",
                 color = Color.White,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold
@@ -156,7 +180,7 @@ fun SectionHeader(title: String) {
 }
 
 @Composable
-fun AlbumLazyRow(albums: List<Album>, onAlbumClick: (Int) -> Unit) {
+fun AlbumLazyRow(albums: List<Album>, onAlbumClick: (String) -> Unit) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 24.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -168,7 +192,7 @@ fun AlbumLazyRow(albums: List<Album>, onAlbumClick: (Int) -> Unit) {
 }
 
 @Composable
-fun AlbumCard(album: Album, onAlbumClick: (Int) -> Unit) {
+fun AlbumCard(album: Album, onAlbumClick: (String) -> Unit) {
     Box(
         modifier = Modifier
             .width(200.dp)
@@ -234,7 +258,7 @@ fun AlbumCard(album: Album, onAlbumClick: (Int) -> Unit) {
 }
 
 @Composable
-fun RecentlyPlayedItem(album: Album, onAlbumClick: (Int) -> Unit) {
+fun RecentlyPlayedItem(album: Album, onAlbumClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
