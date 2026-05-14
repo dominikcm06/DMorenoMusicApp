@@ -25,7 +25,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.dmorenomusicapp.data.Album
 import com.example.dmorenomusicapp.data.MusicApiService
 import com.example.dmorenomusicapp.ui.components.MiniPlayer
@@ -201,7 +203,11 @@ fun AlbumCard(album: Album, onAlbumClick: (String) -> Unit) {
             .clickable { onAlbumClick(album.id) }
     ) {
         AsyncImage(
-            model = album.image,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(album.image)
+                .addHeader("User-Agent", "Mozilla/5.0")
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
@@ -275,7 +281,11 @@ fun RecentlyPlayedItem(album: Album, onAlbumClick: (String) -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = album.image,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(album.image)
+                    .addHeader("User-Agent", "Mozilla/5.0")
+                    .crossfade(true)
+                    .build(),
                 contentDescription = null,
                 modifier = Modifier
                     .size(52.dp)

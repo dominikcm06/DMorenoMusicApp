@@ -14,7 +14,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 
 @Composable
 fun MiniPlayer() {
@@ -33,7 +35,11 @@ fun MiniPlayer() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = "https://musicapi.pjasoft.com/images/tales_of_ithiria.jpg",
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data("https://musicapi.pjasoft.com/images/tales_of_ithiria.jpg")
+                    .addHeader("User-Agent", "Mozilla/5.0")
+                    .crossfade(true)
+                    .build(),
                 contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
