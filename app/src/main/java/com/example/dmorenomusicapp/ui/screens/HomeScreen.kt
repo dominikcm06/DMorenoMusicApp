@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -56,7 +57,7 @@ fun HomeScreen(onAlbumClick: (Int) -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF5F3FF))
+                .background(Color(0xFFE9E3FF))
         ) {
             HeaderSection()
 
@@ -98,8 +99,9 @@ fun HeaderSection() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
-            .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+            .height(220.dp)
+            .padding(16.dp)
+            .clip(RoundedCornerShape(32.dp))
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(Color(0xFFA78BFA), Color(0xFF8B5CF6))
@@ -134,20 +136,21 @@ fun SectionHeader(title: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp),
+            .padding(horizontal = 24.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = title,
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
         )
         Text(
             text = "See more",
             fontSize = 14.sp,
-            color = PrimaryPurple
+            color = PrimaryPurple,
+            fontWeight = FontWeight.Medium
         )
     }
 }
@@ -166,37 +169,35 @@ fun AlbumLazyRow(albums: List<Album>, onAlbumClick: (Int) -> Unit) {
 
 @Composable
 fun AlbumCard(album: Album, onAlbumClick: (Int) -> Unit) {
-    Card(
+    Box(
         modifier = Modifier
             .width(200.dp)
             .height(200.dp)
-            .clickable { onAlbumClick(album.id) },
-        shape = RoundedCornerShape(24.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .clickable { onAlbumClick(album.id) }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            AsyncImage(
-                model = album.image,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f)),
-                            startY = 300f
-                        )
-                    )
-            )
+        AsyncImage(
+            model = album.image,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        
+        Box(
+            modifier = Modifier
+                .padding(12.dp)
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .height(60.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(Color(0xFF130E26).copy(alpha = 0.6f))
+                .padding(horizontal = 12.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
             Row(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -208,22 +209,24 @@ fun AlbumCard(album: Album, onAlbumClick: (Int) -> Unit) {
                     )
                     Text(
                         text = album.artist,
-                        color = Color.LightGray,
-                        fontSize = 12.sp,
+                        color = Color.White.copy(alpha = 0.7f),
+                        fontSize = 11.sp,
                         maxLines = 1
                     )
                 }
                 Surface(
                     shape = CircleShape,
                     color = Color.White,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(28.dp)
                 ) {
-                    Icon(
-                        Icons.Default.PlayArrow,
-                        contentDescription = null,
-                        tint = Color.Black,
-                        modifier = Modifier.padding(4.dp)
-                    )
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            Icons.Default.PlayArrow,
+                            contentDescription = null,
+                            tint = Color.Black,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
                 }
             }
         }
@@ -235,11 +238,11 @@ fun RecentlyPlayedItem(album: Album, onAlbumClick: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(horizontal = 24.dp, vertical = 6.dp)
+            .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp), spotColor = Color(0xFFD1C4E9))
             .clickable { onAlbumClick(album.id) },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier
@@ -251,15 +254,15 @@ fun RecentlyPlayedItem(album: Album, onAlbumClick: (Int) -> Unit) {
                 model = album.image,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(50.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+                    .size(52.dp)
+                    .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = album.title,
-                    fontSize = 16.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
@@ -272,7 +275,7 @@ fun RecentlyPlayedItem(album: Album, onAlbumClick: (Int) -> Unit) {
             Icon(
                 Icons.Default.MoreVert,
                 contentDescription = null,
-                tint = TextGray
+                tint = Color.LightGray
             )
         }
     }

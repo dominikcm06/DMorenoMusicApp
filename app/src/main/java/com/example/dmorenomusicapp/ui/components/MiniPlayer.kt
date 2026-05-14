@@ -15,30 +15,29 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.dmorenomusicapp.ui.theme.DarkPurple
 
 @Composable
 fun MiniPlayer() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .height(70.dp),
-        shape = RoundedCornerShape(35.dp),
-        colors = CardDefaults.cardColors(containerColor = DarkPurple)
+            .padding(horizontal = 20.dp, vertical = 12.dp)
+            .height(64.dp),
+        shape = RoundedCornerShape(32.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF130E26))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
                 model = "https://musicapi.pjasoft.com/images/tales_of_ithiria.jpg",
                 contentDescription = null,
                 modifier = Modifier
-                    .size(45.dp)
-                    .clip(RoundedCornerShape(10.dp)),
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(24.dp)),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(12.dp))
@@ -51,23 +50,27 @@ fun MiniPlayer() {
                 )
                 Text(
                     text = "Haggard",
-                    color = Color.LightGray,
+                    color = Color.White.copy(alpha = 0.6f),
                     fontSize = 12.sp,
                     maxLines = 1
                 )
             }
-            IconButton(
-                onClick = { /* UI State Only */ },
-                modifier = Modifier
-                    .background(Color.White, RoundedCornerShape(20.dp))
-                    .size(36.dp)
+            Surface(
+                onClick = { },
+                shape = RoundedCornerShape(20.dp),
+                color = Color.White,
+                modifier = Modifier.size(36.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = null,
-                    tint = DarkPurple
-                )
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = null,
+                        tint = Color(0xFF130E26),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
+            Spacer(modifier = Modifier.width(8.dp))
         }
     }
 }

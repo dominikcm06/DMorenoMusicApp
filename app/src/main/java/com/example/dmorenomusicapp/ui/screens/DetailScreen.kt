@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -65,13 +66,13 @@ fun DetailScreen(albumId: Int, onBack: () -> Unit) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color(0xFFF5F3FF))
+                        .background(Color(0xFFE9E3FF))
                 ) {
                     DetailHeader(currentAlbum, onBack)
                     
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(bottom = 100.dp, top = 16.dp)
+                        contentPadding = PaddingValues(bottom = 110.dp, top = 8.dp)
                     ) {
                         item {
                             AboutSection(currentAlbum.description)
@@ -98,8 +99,8 @@ fun DetailHeader(album: Album, onBack: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(400.dp)
-            .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
+            .height(380.dp)
+            .clip(RoundedCornerShape(bottomStart = 48.dp, bottomEnd = 48.dp))
     ) {
         AsyncImage(
             model = album.image,
@@ -112,8 +113,8 @@ fun DetailHeader(album: Album, onBack: () -> Unit) {
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color(0xFF2E1065).copy(alpha = 0.8f)),
-                        startY = 400f
+                        colors = listOf(Color.Transparent, Color(0xFF130E26).copy(alpha = 0.85f)),
+                        startY = 500f
                     )
                 )
         )
@@ -121,21 +122,20 @@ fun DetailHeader(album: Album, onBack: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(16.dp),
+                .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             IconButton(
                 onClick = onBack,
-                modifier = Modifier.background(Color.Black.copy(alpha = 0.3f), CircleShape)
+                modifier = Modifier.background(Color.Black.copy(alpha = 0.4f), CircleShape).size(40.dp)
             ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = Color.White)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
             }
             IconButton(
                 onClick = { },
-                modifier = Modifier.background(Color.Black.copy(alpha = 0.3f), CircleShape)
+                modifier = Modifier.background(Color.Black.copy(alpha = 0.4f), CircleShape).size(40.dp)
             ) {
-                Icon(Icons.Default.FavoriteBorder, contentDescription = null, tint = Color.White)
+                Icon(Icons.Default.FavoriteBorder, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
             }
         }
 
@@ -147,39 +147,43 @@ fun DetailHeader(album: Album, onBack: () -> Unit) {
             Text(
                 text = album.title,
                 color = Color.White,
-                fontSize = 32.sp,
+                fontSize = 28.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = album.artist,
                 color = Color.White.copy(alpha = 0.8f),
-                fontSize = 18.sp
+                fontSize = 16.sp
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Surface(
                     shape = CircleShape,
                     color = PrimaryPurple,
-                    modifier = Modifier.size(56.dp)
+                    modifier = Modifier.size(52.dp)
                 ) {
-                    Icon(
-                        Icons.Default.PlayArrow,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.padding(12.dp)
-                    )
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            Icons.Default.PlayArrow,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
                 }
                 Surface(
                     shape = CircleShape,
                     color = Color.White,
-                    modifier = Modifier.size(56.dp)
+                    modifier = Modifier.size(52.dp)
                 ) {
-                    Icon(
-                        Icons.Default.Shuffle,
-                        contentDescription = null,
-                        tint = Color.Black,
-                        modifier = Modifier.padding(16.dp)
-                    )
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            Icons.Default.Shuffle,
+                            contentDescription = null,
+                            tint = Color.Black,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
         }
@@ -191,16 +195,17 @@ fun AboutSection(description: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp),
+            .padding(horizontal = 24.dp, vertical = 12.dp)
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(24.dp), spotColor = Color(0xFFD1C4E9)),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Column(modifier = Modifier.padding(24.dp)) {
+        Column(modifier = Modifier.padding(20.dp)) {
             Text(
                 text = "About this album",
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E1065)
+                color = Color(0xFF130E26)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -216,20 +221,20 @@ fun AboutSection(description: String) {
 @Composable
 fun ArtistChip(artist: String) {
     Surface(
-        modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(16.dp),
-        color = Color(0xFFF3E8FF)
+        modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
+        shape = RoundedCornerShape(12.dp),
+        color = Color.White
     ) {
-        Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)) {
             Text(
                 text = "Artist: ",
-                fontSize = 14.sp,
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E1065)
+                color = Color(0xFF130E26)
             )
             Text(
                 text = artist,
-                fontSize = 14.sp,
+                fontSize = 13.sp,
                 color = TextGray
             )
         }
@@ -241,7 +246,8 @@ fun TrackItem(album: Album, index: Int) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 4.dp),
+            .padding(horizontal = 24.dp, vertical = 6.dp)
+            .shadow(elevation = 2.dp, shape = RoundedCornerShape(16.dp), spotColor = Color(0xFFD1C4E9)),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
@@ -255,8 +261,8 @@ fun TrackItem(album: Album, index: Int) {
                 model = album.image,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(10.dp)),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(16.dp))
@@ -276,7 +282,7 @@ fun TrackItem(album: Album, index: Int) {
             Icon(
                 Icons.Default.MoreVert,
                 contentDescription = null,
-                tint = TextGray
+                tint = Color.LightGray
             )
         }
     }
