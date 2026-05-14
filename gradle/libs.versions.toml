@@ -33,6 +33,7 @@ retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", ver
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version = "1.7.8" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
